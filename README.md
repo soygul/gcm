@@ -7,6 +7,37 @@ GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for ap
 
 Uses the XMPP endpoint to have persistent and asynchronous connection with the Google's GCM servers.
 
+## Example
+
+```go
+package main
+
+import (
+  "log"
+
+  "github.com/soygul/gcm-ccs"
+  )
+
+  func main() {
+    c, err := ccs.Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
+    if err != nil {
+      log.Fatalf("GCM CCS connection cannot be established.")
+    }
+
+    for {
+      m, err := c.Receive()
+      if err != nil {
+        log.Printf("Incoming CCS error: %v\n", err)
+      }
+      go readHandler(m)
+    }
+  }
+
+  func readHandler(m *ccs.InMsg) {
+    log.Printf("Incoming CCS message: %v\n", m)
+  }
+```
+
 ## Testing
 All the tests can be executed by regular `go test` command while integration tests require the following environment variables to be defined. If they are missing, integration tests are skipped.
 
