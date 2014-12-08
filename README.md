@@ -25,6 +25,7 @@ import (
     }
 
     for {
+      log.Printf("Waiting for incoming CCS messages")
       m, err := c.Receive()
       if err != nil {
         log.Printf("Incoming CCS error: %v\n", err)
