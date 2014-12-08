@@ -31,6 +31,7 @@ func main() {
 		if err != nil {
 			log.Printf("Incoming CCS error: %v\n", err)
 		}
+
 		go readHandler(m)
 	}
 }
