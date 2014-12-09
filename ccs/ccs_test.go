@@ -50,7 +50,7 @@ func TestMessageFields(t *testing.T) {
 	c.Close()
 }
 
-func ExampleConnect() {
+func Example() {
 	c, err := Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
 	if err != nil {
 		log.Fatalf("GCM CCS connection cannot be established.")
