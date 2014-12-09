@@ -43,6 +43,8 @@ func readHandler(m *ccs.InMsg) {
 }
 ```
 
+You can also use the `Conn.Send(...)` function to send messages to devices but it's not shown here as it requires a registration ID from a known device. Check the godocs for more information.
+
 Testing
 -------
 
