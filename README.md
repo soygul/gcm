@@ -1,7 +1,7 @@
 GCM CCS (XMPP)
 ==============
 
-[![Build Status](https://travis-ci.org/nbusy/gcm-ccs.svg?branch=master)](https://travis-ci.org/nbusy/gcm-ccs)
+[![Build Status](https://travis-ci.org/nbusy/gcm.svg?branch=master)](https://travis-ci.org/nbusy/gcm)
 
 GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for application servers as described in [Android docs](https://developer.android.com/google/gcm/ccs.html).
 
