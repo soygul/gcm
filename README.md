@@ -7,8 +7,10 @@ GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for ap
 
 Uses the XMPP endpoint to have persistent and asynchronous connection with the Google's GCM servers.
 
-Example
--------
+The HTTP implementation is a work in progress.
+
+CCS Example
+-----------
 
 ```go
 package main
@@ -16,7 +18,7 @@ package main
 import (
 	"log"
 
-	"github.com/soygul/gcm-ccs"
+	"github.com/soygul/gcm/ccs"
 )
 
 func main() {
