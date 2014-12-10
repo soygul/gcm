@@ -14,7 +14,7 @@ func Example() {
 	}
 
 	// Send a test message. Replace "device_registration_id" with an actual GCM registration ID from a device.
-	n, err = c.Send(&ccs.OutMsg{To: "device_registration_id", Data: map[string]string{"test_message": "GCM CCS client testing message."}})
+	n, err := c.Send(&ccs.OutMsg{To: "device_registration_id", Data: map[string]string{"test_message": "GCM CCS client testing message."}})
 	if err != nil {
 		log.Printf("Failed to send message to CCS server with error: %v\n", err)
 	}
