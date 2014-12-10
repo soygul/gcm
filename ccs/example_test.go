@@ -20,7 +20,7 @@ func Example() {
 	}
 	log.Printf("Message sent with %v bytes written to the connection.\n", n)
 
-	// Start accepting meessages from the CCS server.
+	// Start receiving messages from the CCS server.
 	for {
 		log.Println("Waiting for incoming CCS messages")
 		m, err := c.Receive()

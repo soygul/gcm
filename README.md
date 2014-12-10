@@ -16,34 +16,30 @@ CCS Example
 package main
 
 import (
-	"log"
-
+	"fmt"
 	"github.com/soygul/gcm/ccs"
 )
 
 func main() {
 	c, err := ccs.Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
 	if err != nil {
-		log.Fatalf("GCM CCS connection cannot be established.")
+		return
 	}
 
+	// send a test message to a device
+	_, err = c.Send(&ccs.OutMsg{To: "device_registration_id", Data: map[string]string{"test_message": "GCM CCS client testing message."}})
+
+	// start receiving messages from CCS
 	for {
-		log.Printf("Waiting for incoming CCS messages")
 		m, err := c.Receive()
-		if err != nil {
-			log.Printf("Incoming CCS error: %v\n", err)
-		}
-
-		go readHandler(m)
+		go func(m *ccs.InMsg) {
+			log.Printf("message: %v\n error (if any): %v\n", m, err)
+		}(m)
 	}
-}
-
-func readHandler(m *ccs.InMsg) {
-	log.Printf("Incoming CCS message: %v\n", m)
 }
 ```
 
-You can also use the `Conn.Send(...)` function to send messages to devices but it's not shown here as it requires a registration ID from a known device. Check the godocs for more information.
+To see a more comprehensive example, check the godocs.
 
 Testing
 -------
