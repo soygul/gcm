@@ -1,13 +1,9 @@
 package ccs_test
 
-import (
-	"log"
-
-	"github.com/nbusy/gcm/ccs"
-)
+import "log"
 
 func Example() {
-	c, err := ccs.Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
+	c, err := Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
 	if err != nil {
 		log.Fatalf("GCM CCS connection cannot be established.")
 	}
@@ -25,6 +21,6 @@ func Example() {
 	}
 }
 
-func readHandler(m *ccs.InMsg) {
+func readHandler(m *InMsg) {
 	log.Printf("Incoming CCS message: %v\n", m)
 }

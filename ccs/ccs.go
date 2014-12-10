@@ -98,7 +98,7 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 		}
 	} else {
 		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
-		_, err = c.Send(ack)
+		err = c.Send(ack)
 		if err != nil {
 			return false, nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
 		}
@@ -111,11 +111,19 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 	return false, nil, errors.New("unknow message")
 }
 
-// Send sends a message to GCM CCS server and returns the number
-// of bytes written and any net.Conn write error encountered.
-func (c *Conn) Send(message *OutMsg) (n int, err error) {
+// Send sends a message to GCM CCS server.
+func (c *Conn) Send(message *OutMsg) error {
 	res := fmt.Sprintf(gcmXML, message)
-	return c.xmppConn.SendOrg(res)
+	n, err := c.xmppConn.SendOrg(res)
+
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return errors.New("CCS error while sending message: 0 bytes were written to the underlying socket connection")
+	}
+
+	return nil
 }
 
 // Close a CSS connection.
