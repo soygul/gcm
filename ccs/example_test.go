@@ -6,6 +6,7 @@ import (
 	"github.com/nbusy/gcm/ccs"
 )
 
+// Package level example demonstrating the use of CCS implementation in an application server.
 func Example() {
 	c, err := ccs.Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
 	if err != nil {
@@ -13,6 +14,9 @@ func Example() {
 	}
 
 	err = c.Send(&ccs.OutMsg{To: "device_registration_id", Data: map[string]string{"test_message": "GCM CCS client testing message."}})
+	if err != nil {
+		log.Fatalf("Failed to send message to CCS server with error: %v\n", err)
+	}
 
 	for {
 		log.Printf("Waiting for incoming CCS messages")
