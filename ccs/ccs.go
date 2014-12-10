@@ -112,14 +112,17 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 }
 
 // Send sends a message to GCM CCS server.
+// If there was an error while sending, connection closed and error is returned.
 func (c *Conn) Send(message *OutMsg) error {
 	res := fmt.Sprintf(gcmXML, message)
 	n, err := c.xmppConn.SendOrg(res)
 
 	if err != nil {
+		c.Close()
 		return err
 	}
 	if n == 0 {
+		c.Close()
 		return errors.New("CCS error while sending message: 0 bytes were written to the underlying socket connection")
 	}
 
