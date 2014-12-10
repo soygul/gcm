@@ -72,10 +72,12 @@ func receive(t *testing.T, c *Conn) *InMsg {
 }
 
 func send(t *testing.T, c *Conn, m *OutMsg) (n int) {
-	err := c.Send(m)
+	n, err := c.Send(m)
 	if err != nil {
 		t.Fatalf("CCS error while sending message: %v", err)
 	}
-
+	if n == 0 {
+		t.Fatal("CCS error while sending message: 0 bytes were written to the underlying socket connection")
+	}
 	return
 }

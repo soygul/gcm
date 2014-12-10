@@ -57,7 +57,6 @@ func Connect(host, senderID, apiKey string, debug bool) (*Conn, error) {
 func (c *Conn) Receive() (*InMsg, error) {
 	event, err := c.xmppConn.Recv()
 	if err != nil {
-		c.Close()
 		return nil, err
 	}
 
@@ -98,7 +97,7 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 		}
 	} else {
 		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
-		err = c.Send(ack)
+		_, err = c.Send(ack)
 		if err != nil {
 			return false, nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
 		}
@@ -111,22 +110,11 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 	return false, nil, errors.New("unknow message")
 }
 
-// Send sends a message to GCM CCS server.
-// If there was an error while sending, connection closed and error is returned.
-func (c *Conn) Send(message *OutMsg) error {
+// Send sends a message to GCM CCS server and returns the number
+// of bytes written and any error encountered.
+func (c *Conn) Send(message *OutMsg) (n int, err error) {
 	res := fmt.Sprintf(gcmXML, message)
-	n, err := c.xmppConn.SendOrg(res)
-
-	if err != nil {
-		c.Close()
-		return err
-	}
-	if n == 0 {
-		c.Close()
-		return errors.New("CCS error while sending message: 0 bytes were written to the underlying socket connection")
-	}
-
-	return nil
+	return c.xmppConn.SendOrg(res)
 }
 
 // Close a CSS connection.
