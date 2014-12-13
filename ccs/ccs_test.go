@@ -18,6 +18,10 @@ func TestConnect(t *testing.T) {
 	c.Close()
 }
 
+func TestConnectError(t *testing.T) {
+
+}
+
 func TestSend(t *testing.T) {
 	if regID == "" {
 		t.Skip("skipping integration test due to missing GCM registration ID (GCM_REG_ID) environment variable.")
@@ -37,14 +41,18 @@ func TestSend(t *testing.T) {
 	c.Close()
 }
 
+func TestSendError(t *testing.T) {
+
+}
+
+// Test to see if we can handle all known GCM message types properly.
 func TestGCMMessages(t *testing.T) {
-	// see if we can handle all known GCM message types properly
 	c := getConn(t)
 	c.Close()
 }
 
+// Test to see if our message structure's fields match the incoming message fields exactly.
 func TestMessageFields(t *testing.T) {
-	// see if our message structure's fields match the incoming message fields exactly
 	c := getConn(t)
 	c.Close()
 }

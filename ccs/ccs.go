@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	gcmXML    = `<message id=""><gcm xmlns="google:mobile:data">%v</gcm></message>`
-	gcmDomain = "gcm.googleapis.com"
+	gcmMessageStanza = `<message id=""><gcm xmlns="google:mobile:data">%v</gcm></message>`
+	gcmDomain        = "gcm.googleapis.com"
 )
 
 // Conn is a GCM CCS connection.
@@ -113,7 +113,7 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 // Send sends a message to GCM CCS server and returns the number
 // of bytes written and any error encountered.
 func (c *Conn) Send(message *OutMsg) (n int, err error) {
-	res := fmt.Sprintf(gcmXML, message)
+	res := fmt.Sprintf(gcmMessageStanza, message)
 	return c.xmppConn.SendOrg(res)
 }
 
