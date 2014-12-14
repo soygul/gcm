@@ -20,9 +20,9 @@ const (
 
 // Conn is a GCM CCS connection.
 type Conn struct {
-	Host, SenderID, APIKey string
-	Debug                  bool
-	xmppConn               *xmpp.Client
+	Host, SenderID string
+	Debug          bool
+	xmppConn       *xmpp.Client
 }
 
 // Connect connects to GCM CCS server denoted by host (production or staging CCS endpoint URI) along with relevant credentials.
@@ -48,7 +48,6 @@ func Connect(host, senderID, apiKey string, debug bool) (*Conn, error) {
 	return &Conn{
 		Host:     host,
 		SenderID: senderID,
-		APIKey:   apiKey,
 		Debug:    debug,
 		xmppConn: c,
 	}, nil

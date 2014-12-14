@@ -29,7 +29,7 @@ func TestSend(t *testing.T) {
 
 	c := getConn(t)
 
-	outmsg := OutMsg{ID: "2", To: regID, Data: map[string]string{"test_message": "GCM CCS client testing message."}}
+	outmsg := OutMsg{To: regID, Data: map[string]string{"test_message": "GCM CCS client testing message."}}
 	t.Logf("Testing out message: %+v to device with registration ID: %+v", outmsg, regID)
 	send(t, c, &outmsg)
 
