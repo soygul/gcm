@@ -110,10 +110,14 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 	return false, nil, errors.New("unknow message")
 }
 
-// Send sends a message to GCM CCS server and returns the number
-// of bytes written and any error encountered.
+// Send sends a message to GCM CCS server and returns the number of bytes written and any error encountered.
 func (c *Conn) Send(message *OutMsg) (n int, err error) {
-	res := fmt.Sprintf(gcmMessageStanza, message)
+	mbytes, err := json.Marshal(message)
+	if err != nil {
+		return 0, err
+	}
+	mstr := string(mbytes)
+	res := fmt.Sprintf(gcmMessageStanza, mstr)
 	return c.xmppConn.SendOrg(res)
 }
 

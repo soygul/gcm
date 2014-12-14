@@ -1,6 +1,10 @@
 package ccs
 
-import "encoding/json"
+import (
+	"math/rand"
+	"strconv"
+	"time"
+)
 
 // OutMsg is an XMPP <message> stanzas used in sending messages to the GCM CCS server.
 // https://developer.android.com/google/gcm/ccs.html#format
@@ -28,11 +32,11 @@ type InMsg struct {
 
 // NewMsg creates a outgoing CCS message.
 func NewMsg(id string) OutMsg {
-	// r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	return OutMsg{
-		To: id,
-		// ID:   "m-" + strconv.Itoa(r.Intn(100000)),
+		To:   id,
+		ID:   "m-" + strconv.Itoa(r.Intn(100000)),
 		Data: make(map[string]string),
 	}
 }
@@ -44,9 +48,4 @@ func (m *OutMsg) SetData(key string, value string) {
 		m.Data = make(map[string]string)
 	}
 	m.Data[key] = value
-}
-
-func (m *OutMsg) String() string {
-	result, _ := json.Marshal(m)
-	return string(result)
 }
