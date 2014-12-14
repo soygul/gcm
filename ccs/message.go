@@ -1,12 +1,9 @@
 package ccs
 
-import (
-	"math/rand"
-	"strconv"
-	"time"
-)
-
-// OutMsg is an XMPP <message> stanzas used in sending messages to the GCM CCS server.
+// OutMsg is a message to be sent to GCM CCS.
+// If ID field is not set, it will be generated automatically using crypto/rand.
+// Google recommends Data field to be strings key/value pairs and keys cannot be reserved
+// words described in GCM server documentation.
 // https://developer.android.com/google/gcm/ccs.html#format
 type OutMsg struct {
 	To                       string            `json:"to"`
@@ -19,7 +16,7 @@ type OutMsg struct {
 	DeliveryReceiptRequested bool              `json:"delivery_receipt_requested,omitempty"` //default:false
 }
 
-// InMsg is an XMPP <message> stanzas coming from the CCS server.
+// InMsg is an incoming GCM CCS message.
 type InMsg struct {
 	From        string            `json:"from"`
 	ID          string            `json:"message_id"`
@@ -28,24 +25,4 @@ type InMsg struct {
 	ControlType string            `json:"control_type"`
 	Err         string            `json:"error"`
 	ErrDesc     string            `json:"error_description"`
-}
-
-// NewMsg creates a outgoing CCS message.
-func NewMsg(id string) OutMsg {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-
-	return OutMsg{
-		To:   id,
-		ID:   "m-" + strconv.Itoa(r.Intn(100000)),
-		Data: make(map[string]string),
-	}
-}
-
-// SetData adds a key/value pair to the message payload data. Google recommends key/value pairs to be strings and
-// keys cannot be reserved words described in GCM server documentation.
-func (m *OutMsg) SetData(key string, value string) {
-	if m.Data == nil {
-		m.Data = make(map[string]string)
-	}
-	m.Data[key] = value
 }

@@ -3,6 +3,7 @@
 package ccs
 
 import (
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -111,14 +112,31 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 }
 
 // Send sends a message to GCM CCS server and returns the number of bytes written and any error encountered.
-func (c *Conn) Send(message *OutMsg) (n int, err error) {
-	mbytes, err := json.Marshal(message)
+func (c *Conn) Send(m *OutMsg) (n int, err error) {
+	if m.ID == "" {
+		m.ID, err = getMsgID()
+		if err != nil {
+			return 0, err
+		}
+	}
+
+	mb, err := json.Marshal(m)
 	if err != nil {
 		return 0, err
 	}
-	mstr := string(mbytes)
-	res := fmt.Sprintf(gcmMessageStanza, mstr)
+	ms := string(mb)
+	res := fmt.Sprintf(gcmMessageStanza, ms)
 	return c.xmppConn.SendOrg(res)
+}
+
+// getID generates a unique message ID using crypto/rand in the form "m-96bitBase16"
+func getMsgID() (string, error) {
+	b := make([]byte, 12)
+	_, err := rand.Read(b)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprintf("m-%x", b), nil
 }
 
 // Close a CSS connection.

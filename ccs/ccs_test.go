@@ -50,7 +50,13 @@ func TestQueueAck(t *testing.T) {
 }
 
 func TestMessageId(t *testing.T) {
-	// is gcm generating proper message IDs?
+	id, err := getMsgID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(id) != 26 {
+		t.Fatalf("Failed to generate unique message ID of lenght 26 chars.")
+	}
 }
 
 // Test to see if we can handle all known GCM message types properly.
