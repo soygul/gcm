@@ -18,6 +18,10 @@ func TestConnect(t *testing.T) {
 	c.Close()
 }
 
+func TestClosedConnection(t *testing.T) {
+	// test guard against nil/closed connections
+}
+
 func TestConnectError(t *testing.T) {
 
 }

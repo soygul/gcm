@@ -20,6 +20,7 @@ type OutMsg struct {
 type InMsg struct {
 	From        string            `json:"from"`
 	ID          string            `json:"message_id"`
+	Category    string            `json:"category"`
 	Data        map[string]string `json:"data"`
 	MessageType string            `json:"message_type"`
 	ControlType string            `json:"control_type"`
