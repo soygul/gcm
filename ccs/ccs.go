@@ -94,6 +94,8 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 			errFormat := "From: %v, Message ID: %v, Error: %v, Error Description: %v"
 			result := fmt.Sprintf(errFormat, m.From, m.ID, m.Err, m.ErrDesc)
 			return true, nil, errors.New(result)
+		case "receipt":
+			return true, nil, nil
 		}
 	} else {
 		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}

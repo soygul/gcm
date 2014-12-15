@@ -23,7 +23,6 @@ func TestClosedConnection(t *testing.T) {
 }
 
 func TestConnectError(t *testing.T) {
-
 }
 
 func TestSend(t *testing.T) {
@@ -46,11 +45,16 @@ func TestSend(t *testing.T) {
 }
 
 func TestSendError(t *testing.T) {
-
 }
 
-func TestQueueAck(t *testing.T) {
+func TestAck(t *testing.T) {
 	// messages should be removed from the queue once they are ACKed (or delivery receipt arrives if requested)
+}
+
+func TestNack(t *testing.T) {
+}
+
+func TestReceipt(t *testing.T) {
 }
 
 func TestMessageId(t *testing.T) {
