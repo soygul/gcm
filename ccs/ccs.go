@@ -40,7 +40,6 @@ func Connect(host, senderID, apiKey string, debug bool) (*Conn, error) {
 			log.Printf("New CCS connection failed to establish with XMPP parameters: %+v and with error: %v\n", c, err)
 		}
 	}
-
 	if err != nil {
 		return nil, err
 	}
@@ -70,9 +69,11 @@ func (c *Conn) Receive() (*InMsg, error) {
 			return nil, nil
 		}
 		return message, nil
+	case xmpp.Presence:
+		return nil, fmt.Errorf("XMPP presence message from CCS which is not valid: %+v\n", v)
+	default:
+		return nil, fmt.Errorf("Unknown XMPP message type from CCS: %+v\n", v)
 	}
-
-	return nil, nil
 }
 
 // isGcmMsg indicates if this is a GCM control message (ack, nack, control) coming from the CCS server.
@@ -81,8 +82,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err error) {
 	log.Printf("Incoming raw CCS message: %+v\n", msg)
 	var m InMsg
-	err = json.Unmarshal([]byte(msg), &m)
-	if err != nil {
+	if err = json.Unmarshal([]byte(msg), &m); err != nil {
 		return false, nil, errors.New("unknow message from CCS")
 	}
 
@@ -99,8 +99,7 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 		}
 	} else {
 		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
-		_, err = c.Send(ack)
-		if err != nil {
+		if _, err = c.Send(ack); err != nil {
 			return false, nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
 		}
 	}
@@ -115,8 +114,7 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 // Send sends a message to GCM CCS server and returns the number of bytes written and any error encountered.
 func (c *Conn) Send(m *OutMsg) (n int, err error) {
 	if m.ID == "" {
-		m.ID, err = getMsgID()
-		if err != nil {
+		if m.ID, err = getMsgID(); err != nil {
 			return 0, err
 		}
 	}
@@ -133,8 +131,7 @@ func (c *Conn) Send(m *OutMsg) (n int, err error) {
 // getID generates a unique message ID using crypto/rand in the form "m-96bitBase16"
 func getMsgID() (string, error) {
 	b := make([]byte, 12)
-	_, err := rand.Read(b)
-	if err != nil {
+	if _, err := rand.Read(b); err != nil {
 		return "", err
 	}
 	return fmt.Sprintf("m-%x", b), nil
