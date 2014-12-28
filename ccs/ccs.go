@@ -59,56 +59,42 @@ func (c *Conn) Receive() (*InMsg, error) {
 		return nil, err
 	}
 
-	switch v := event.(type) {
-	case xmpp.Chat:
-		isGcmMsg, message, err := c.handleMessage(v.Other[0])
-		if err != nil {
-			return nil, err
-		}
-		if isGcmMsg {
-			return nil, nil
-		}
-		return message, nil
-	case xmpp.Presence:
-		return nil, fmt.Errorf("XMPP presence message from CCS which is not valid: %+v\n", v)
-	default:
-		return nil, fmt.Errorf("Unknown XMPP message type from CCS: %+v\n", v)
+	chat, ok := event.(xmpp.Chat)
+	if !ok {
+		return nil, nil
 	}
-}
 
-// isGcmMsg indicates if this is a GCM control message (ack, nack, receipt, control) coming from the CCS server.
-// If so, the message is automatically handled with appropriate response. Otherwise, it is sent to the
-// parent app server for handling.
-func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err error) {
-	log.Printf("Incoming raw CCS message: %+v\n", msg)
+	log.Printf("Incoming raw CCS message: %+v\n", chat)
+
 	var m InMsg
-	if err = json.Unmarshal([]byte(msg), &m); err != nil {
-		return false, nil, errors.New("unknow message from CCS")
+	if err = json.Unmarshal([]byte(chat.Other[0]), &m); err != nil { // todo: handle other fields of chat (remote/type/text/other[1,2,..])
+		return nil, errors.New("unknow message from CCS")
 	}
 
 	switch m.MessageType {
 	case "ack":
-		return true, nil, nil
+		return nil, nil
 	case "nack":
 		errFormat := "From: %v, Message ID: %v, Error: %v, Error Description: %v"
 		result := fmt.Sprintf(errFormat, m.From, m.ID, m.Err, m.ErrDesc)
-		return true, nil, errors.New(result)
+		return nil, errors.New(result)
 	case "receipt":
-		return true, nil, nil
+		return nil, nil
 	case "control":
-		return true, nil, nil
-	default:
-		// acknowledge the incoming message as per spec
-		if m.From != "" {
+		return nil, nil
+	case "":
+		// acknowledge the incoming message as per specs
+		if m.From != "" { // todo: what if From is empty? review specs
 			ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
 			if _, err = c.Send(ack); err != nil {
-				return false, nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
+				return nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
 			}
-			return false, &m, nil
+			return &m, nil
 		}
+	default:
+		// unknown message types are ignored as adviced by the specs
 	}
-
-	return false, nil, errors.New("unknow message")
+	return &m, nil
 }
 
 // Send sends a message to GCM CCS server and returns the number of bytes written and any error encountered.
