@@ -2,8 +2,8 @@ package ccs
 
 // OutMsg is a message to be sent to GCM CCS.
 // If ID field is not set, it will be generated automatically using crypto/rand.
-// Google recommends Data field to be strings key/value pairs and keys cannot be reserved
-// words described in GCM server documentation.
+// Google recommends Data field to be strings key/value pairs and keys cannot be
+// reserved words described in GCM server documentation.
 // https://developer.android.com/google/gcm/ccs.html#format
 type OutMsg struct {
 	To                       string            `json:"to"`

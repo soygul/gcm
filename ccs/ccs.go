@@ -76,7 +76,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 	}
 }
 
-// isGcmMsg indicates if this is a GCM control message (ack, nack, control) coming from the CCS server.
+// isGcmMsg indicates if this is a GCM control message (ack, nack, receipt, control) coming from the CCS server.
 // If so, the message is automatically handled with appropriate response. Otherwise, it is sent to the
 // parent app server for handling.
 func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err error) {
@@ -86,26 +86,26 @@ func (c *Conn) handleMessage(msg string) (isGcmMsg bool, message *InMsg, err err
 		return false, nil, errors.New("unknow message from CCS")
 	}
 
-	if m.MessageType != "" {
-		switch m.MessageType {
-		case "ack":
-			return true, nil, nil
-		case "nack":
-			errFormat := "From: %v, Message ID: %v, Error: %v, Error Description: %v"
-			result := fmt.Sprintf(errFormat, m.From, m.ID, m.Err, m.ErrDesc)
-			return true, nil, errors.New(result)
-		case "receipt":
-			return true, nil, nil
+	switch m.MessageType {
+	case "ack":
+		return true, nil, nil
+	case "nack":
+		errFormat := "From: %v, Message ID: %v, Error: %v, Error Description: %v"
+		result := fmt.Sprintf(errFormat, m.From, m.ID, m.Err, m.ErrDesc)
+		return true, nil, errors.New(result)
+	case "receipt":
+		return true, nil, nil
+	case "control":
+		return true, nil, nil
+	default:
+		// acknowledge the incoming message as per spec
+		if m.From != "" {
+			ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
+			if _, err = c.Send(ack); err != nil {
+				return false, nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
+			}
+			return false, &m, nil
 		}
-	} else {
-		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
-		if _, err = c.Send(ack); err != nil {
-			return false, nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
-		}
-	}
-
-	if m.From != "" {
-		return false, &m, nil
 	}
 
 	return false, nil, errors.New("unknow message")
