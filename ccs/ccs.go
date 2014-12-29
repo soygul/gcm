@@ -68,6 +68,8 @@ func (c *Conn) Receive() (*InMsg, error) {
 		return nil, nil
 	}
 
+	log.Printf("Incoming raw CCS stanza content: %+v\n", chat.Other[0])
+
 	var m InMsg
 	if err = json.Unmarshal([]byte(chat.Other[0]), &m); err != nil { // todo: handle other fields of chat (remote/type/text/other[1,2,..])
 		return nil, errors.New("unknow message from CCS")
