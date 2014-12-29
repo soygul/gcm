@@ -52,19 +52,21 @@ func Connect(host, senderID, apiKey string, debug bool) (*Conn, error) {
 	}, nil
 }
 
-// Receive retrieves the next incoming messages from the CCS connection.
+// Receive waits to receive the next incoming messages from the CCS connection.
 func (c *Conn) Receive() (*InMsg, error) {
-	event, err := c.xmppConn.Recv()
+	stanza, err := c.xmppConn.Recv()
 	if err != nil {
 		return nil, err
 	}
 
-	chat, ok := event.(xmpp.Chat)
+	if c.Debug {
+		log.Printf("Incoming raw CCS stanza: %+v\n", stanza)
+	}
+
+	chat, ok := stanza.(xmpp.Chat)
 	if !ok {
 		return nil, nil
 	}
-
-	log.Printf("Incoming raw CCS message: %+v\n", chat)
 
 	var m InMsg
 	if err = json.Unmarshal([]byte(chat.Other[0]), &m); err != nil { // todo: handle other fields of chat (remote/type/text/other[1,2,..])
@@ -116,6 +118,7 @@ func (c *Conn) Send(m *OutMsg) (n int, err error) {
 
 // getID generates a unique message ID using crypto/rand in the form "m-96bitBase16"
 func getMsgID() (string, error) {
+	// todo: we can use sequential numbers optionally, just as the Android client does (1, 2, 3..) in upstream messages
 	b := make([]byte, 12)
 	if _, err := rand.Read(b); err != nil {
 		return "", err
