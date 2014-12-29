@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	gcmMessageStanza = `<message id=""><gcm xmlns="google:mobile:data">%v</gcm></message>`
+	gcmMessageStanza = `<message id=""><gob><gcm xmlns="google:mobile:data">%v</gcm></gob></message>`
 	gcmDomain        = "gcm.googleapis.com"
 )
 
@@ -75,15 +75,13 @@ func (c *Conn) Receive() (*InMsg, error) {
 
 	switch m.MessageType {
 	case "ack":
-		return nil, nil
+		return nil, nil // todo: mark message as sent
 	case "nack":
-		errFormat := "From: %v, Message ID: %v, Error: %v, Error Description: %v"
-		result := fmt.Sprintf(errFormat, m.From, m.ID, m.Err, m.ErrDesc)
-		return nil, errors.New(result)
+		return &m, nil
 	case "receipt":
-		return nil, nil
+		return nil, nil // todo: mark message as delivered and remove from the queue
 	case "control":
-		return nil, nil
+		return nil, nil // todo: handle connection draining (and any other control message type?)
 	case "":
 		// acknowledge the incoming message as per spec
 		if m.From != "" { // todo: what if From is empty? what does it mean? review spec

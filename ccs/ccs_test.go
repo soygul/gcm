@@ -45,6 +45,23 @@ func TestSend(t *testing.T) {
 }
 
 func TestSendError(t *testing.T) {
+	if regID == "" {
+		t.Skip("skipping integration test due to missing GCM registration ID (GCM_REG_ID) environment variable.")
+	}
+
+	// // JSON error
+	// c := getConn(t)
+	//
+	// outmsg := OutMsg{}
+	// t.Logf("Testing out message: %+v to device with registration ID: %+v", outmsg, regID)
+	// send(t, c, &outmsg)
+	//
+	// inmsg := receive(t, c)
+	//
+	// // stanza error
+	//
+	// c.Close()
+
 }
 
 func TestAck(t *testing.T) {
