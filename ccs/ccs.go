@@ -85,8 +85,8 @@ func (c *Conn) Receive() (*InMsg, error) {
 	case "control":
 		return nil, nil
 	case "":
-		// acknowledge the incoming message as per specs
-		if m.From != "" { // todo: what if From is empty? review specs
+		// acknowledge the incoming message as per spec
+		if m.From != "" { // todo: what if From is empty? what does it mean? review spec
 			ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
 			if _, err = c.Send(ack); err != nil {
 				return nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
@@ -94,7 +94,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 			return &m, nil
 		}
 	default:
-		// unknown message types are ignored as adviced by the specs
+		// unknown message types can be ignored, as express in the spec
 	}
 	return &m, nil
 }
