@@ -68,6 +68,11 @@ func (c *Conn) Receive() (*InMsg, error) {
 		return nil, nil
 	}
 
+	if chat.Type == "error" {
+		// todo: once go-xmpp can parse XMPP error messages, return error with XMPP error message (issue: https://github.com/nbusy/gcm/issues/14)
+		return nil, errors.New("CCS returned an XMPP error (can be a stanza or JSON error or anything else)")
+	}
+
 	var m InMsg
 	if err = json.Unmarshal([]byte(chat.Other[0]), &m); err != nil { // todo: handle other fields of chat (remote/type/text/other[1,2,..])
 		return nil, errors.New("unknow message from CCS")
@@ -77,20 +82,18 @@ func (c *Conn) Receive() (*InMsg, error) {
 	case "ack":
 		return nil, nil // todo: mark message as sent
 	case "nack":
-		return &m, nil
+		return &m, nil // todo: try and resend the message (after reconnect if problem is about connection draining)
 	case "receipt":
 		return nil, nil // todo: mark message as delivered and remove from the queue
 	case "control":
 		return nil, nil // todo: handle connection draining (and any other control message type?)
 	case "":
-		// acknowledge the incoming message as per spec
-		if m.From != "" { // todo: what if From is empty? what does it mean? review spec
-			ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
-			if _, err = c.Send(ack); err != nil {
-				return nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
-			}
-			return &m, nil
+		// acknowledge the incoming ordinary messages as per spec
+		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
+		if _, err = c.Send(ack); err != nil {
+			return nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
 		}
+		return &m, nil
 	default:
 		// unknown message types can be ignored, as express in the spec
 	}
