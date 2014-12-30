@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	gcmMessageStanza = `<message id=""><gob><gcm xmlns="google:mobile:data">%v</gcm></gob></message>`
+	gcmMessageStanza = `<message id=""><gcm xmlns="google:mobile:data">%v</gcm></message>`
 	gcmDomain        = "gcm.googleapis.com"
 )
 
@@ -67,8 +67,6 @@ func (c *Conn) Receive() (*InMsg, error) {
 	if !ok {
 		return nil, nil
 	}
-
-	log.Printf("Incoming raw CCS stanza content: %+v\n", chat.Other[0])
 
 	var m InMsg
 	if err = json.Unmarshal([]byte(chat.Other[0]), &m); err != nil { // todo: handle other fields of chat (remote/type/text/other[1,2,..])
