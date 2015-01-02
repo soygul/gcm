@@ -3,7 +3,7 @@ GCM CCS (XMPP)
 
 [![Build Status](https://travis-ci.org/nbusy/gcm.svg?branch=master)](https://travis-ci.org/nbusy/gcm) [![GoDoc](https://godoc.org/github.com/nbusy/gcm?status.svg)](https://godoc.org/github.com/nbusy/gcm)
 
-GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for application servers as described in [Android docs](https://developer.android.com/google/gcm/ccs.html).
+GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for application servers as described in [Android developer docs](https://developer.android.com/google/gcm/ccs.html).
 
 Uses the XMPP endpoint to have persistent and asynchronous connection with the Google's GCM servers.
 
