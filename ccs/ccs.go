@@ -21,7 +21,7 @@ const (
 // Conn is a GCM CCS connection.
 type Conn struct {
 	Host, SenderID string
-	Debug          bool
+	debug          bool
 	xmppConn       *xmpp.Client
 }
 
@@ -47,7 +47,7 @@ func Connect(host, senderID, apiKey string, debug bool) (*Conn, error) {
 	return &Conn{
 		Host:     host,
 		SenderID: senderID,
-		Debug:    debug,
+		debug:    debug,
 		xmppConn: c,
 	}, nil
 }
@@ -59,7 +59,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 		return nil, err
 	}
 
-	if c.Debug {
+	if c.debug {
 		log.Printf("Incoming raw CCS stanza: %+v\n", stanza)
 	}
 
