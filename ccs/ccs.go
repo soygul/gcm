@@ -33,15 +33,12 @@ func Connect(host, senderID, apiKey string, debug bool) (*Conn, error) {
 	}
 
 	c, err := xmpp.NewClient(host, senderID, apiKey, debug)
-	if debug {
-		if err == nil {
-			log.Printf("New CCS connection established with XMPP parameters: %+v\n", c)
-		} else {
-			log.Printf("New CCS connection failed to establish with XMPP parameters: %+v and with error: %v\n", c, err)
-		}
-	}
 	if err != nil {
 		return nil, err
+	}
+
+	if debug {
+		log.Printf("New CCS connection established with XMPP parameters: %+v\n", c)
 	}
 
 	return &Conn{
@@ -91,7 +88,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 		// acknowledge the incoming ordinary messages as per spec
 		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
 		if _, err = c.Send(ack); err != nil {
-			return nil, fmt.Errorf("Failed to send ack message to CCS. Error was: %v", err)
+			return nil, fmt.Errorf("failed to send ack message to CCS with error: %v", err)
 		}
 		return &m, nil
 	default:
