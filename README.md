@@ -44,7 +44,7 @@ To see a more comprehensive example, check the godocs.
 Testing
 -------
 
-All the tests can be executed by `go test -race -cover ./...` command. Integration tests require the following environment variables to be defined. If they are missing, integration tests are skipped.
+All the tests can be executed by `go test -race -cover ./...` command. Optionally you can add `-v` flag to observe all connection logs. Integration tests require the following environment variables to be defined. If they are missing, integration tests are skipped.
 
 ```bash
 export GCM_CCS_HOST=gcm-preprod.googleapis.com:5236
