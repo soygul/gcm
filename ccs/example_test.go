@@ -10,7 +10,7 @@ import (
 func Example() {
 	c, err := ccs.Connect("gcm-preprod.googleapis.com:5236", "gcm_sender_id", "gcm_api_key", true)
 	if err != nil {
-		log.Fatalf("GCM CCS connection cannot be established.")
+		log.Fatalf("GCM CCS connection cannot be established")
 	}
 
 	// Send a test message. Replace "device_registration_id" with an actual GCM registration ID from a device.
@@ -18,7 +18,7 @@ func Example() {
 	if err != nil {
 		log.Printf("Failed to send message to CCS server with error: %v\n", err)
 	}
-	log.Printf("Message sent with %v bytes written to the connection.\n", n)
+	log.Printf("Message sent with %v bytes written to the connection\n", n)
 
 	// Start receiving messages from the CCS server.
 	for {

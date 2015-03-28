@@ -27,12 +27,12 @@ func TestConnectError(t *testing.T) {
 
 func TestSend(t *testing.T) {
 	if regID == "" {
-		t.Skip("skipping integration test due to missing GCM registration ID (GCM_REG_ID) environment variable.")
+		t.Skip("Skipping integration test due to missing GCM registration ID (GCM_REG_ID) environment variable")
 	}
 
 	c := getConn(t)
 
-	outmsg := OutMsg{To: regID, Data: map[string]string{"test_message": "GCM CCS client testing message."}}
+	outmsg := OutMsg{To: regID, Data: map[string]string{"test_message": "GCM CCS client testing message"}}
 	t.Logf("Testing out message: %+v to device with registration ID: %+v", outmsg, regID)
 	send(t, c, &outmsg)
 
@@ -46,7 +46,7 @@ func TestSend(t *testing.T) {
 
 func TestSendError(t *testing.T) {
 	if regID == "" {
-		t.Skip("skipping integration test due to missing GCM registration ID (GCM_REG_ID) environment variable.")
+		t.Skip("Skipping integration test due to missing GCM registration ID (GCM_REG_ID) environment variable")
 	}
 
 	// // JSON error
@@ -80,7 +80,7 @@ func TestMessageId(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(id) != 26 {
-		t.Fatalf("Failed to generate unique message ID of lenght 26 chars.")
+		t.Fatalf("Failed to generate unique message ID of lenght 26 chars")
 	}
 }
 
@@ -98,9 +98,9 @@ func TestMessageFields(t *testing.T) {
 
 func getConn(t *testing.T) *Conn {
 	if testing.Short() {
-		t.Skip("skipping integration test in short testing mode.")
+		t.Skip("Skipping integration test in short testing mode")
 	} else if host == "" || senderID == "" || apiKey == "" {
-		t.Skip("skipping integration test due to missing GCM environment variables.")
+		t.Skip("Skipping integration test due to missing GCM environment variables")
 	}
 
 	c, err := Connect(host, senderID, apiKey, true)
