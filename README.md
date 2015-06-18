@@ -17,7 +17,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/soygul/gcm/ccs"
+	"github.com/nbusy/gcm/ccs"
 )
 
 func main() {
