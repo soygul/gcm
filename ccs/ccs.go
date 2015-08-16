@@ -92,7 +92,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 		}
 		return &m, nil
 	default:
-		// unknown message types can be ignored, as express in the spec
+		// unknown message types can be ignored, as expressed in the spec
 	}
 	return &m, nil
 }
