@@ -1,7 +1,7 @@
-GCM CCS (XMPP)
-==============
+# GCM CCS (XMPP)
 
-[![Build Status](https://travis-ci.org/nbusy/gcm.svg?branch=master)](https://travis-ci.org/nbusy/gcm) [![GoDoc](https://godoc.org/github.com/nbusy/gcm?status.svg)](https://godoc.org/github.com/nbusy/gcm)
+[![Build Status](https://travis-ci.org/nbusy/gcm.svg?branch=master)](https://travis-ci.org/nbusy/gcm)
+[![GoDoc](https://godoc.org/github.com/nbusy/gcm?status.svg)](https://godoc.org/github.com/nbusy/gcm)
 
 GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for application servers as described in [Android developer docs](https://developer.android.com/google/gcm/ccs.html).
 
@@ -9,8 +9,7 @@ Uses the XMPP endpoint to have persistent and asynchronous connection with the G
 
 The HTTP implementation is a work in progress but it is advisable to use the CCS (XMPP) implementation instead as it is asynchronous and hence utilizes server resources more efficiently.
 
-CCS Example
------------
+## CCS Example
 
 ```go
 package main
@@ -41,8 +40,7 @@ func main() {
 
 To see a more comprehensive example, check the godocs.
 
-Testing
--------
+## Testing
 
 All the tests can be executed by `go test -race -cover ./...` command. Optionally you can add `-v` flag to observe all connection logs. Integration tests require the following environment variables to be defined. If they are missing, integration tests are skipped.
 
@@ -56,7 +54,6 @@ export GCM_REG_ID=optional_reg_id_from_android_device
 
 `GCM_REG_ID` is optional and it is a GCM registration ID taken from an Android device or simulator. If provided, it will be used in executing server-to-device messaging tests. Otherwise, these tests will be skipped.
 
-License
--------
+## License
 
 [MIT](LICENSE)
