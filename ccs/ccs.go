@@ -10,7 +10,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/nbusy/go-xmpp"
+	"github.com/nb-titan/go-xmpp"
 )
 
 const (
@@ -66,7 +66,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 	}
 
 	if chat.Type == "error" {
-		// todo: once go-xmpp can parse XMPP error messages, return error with XMPP error message (issue: https://github.com/nbusy/gcm/issues/14)
+		// todo: once go-xmpp can parse XMPP error messages, return error with XMPP error message (issue: https://github.com/nb-titan/gcm/issues/14)
 		return nil, errors.New("CCS returned an XMPP error (can be a stanza or JSON error or anything else)")
 	}
 
