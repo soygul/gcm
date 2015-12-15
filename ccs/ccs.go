@@ -77,13 +77,13 @@ func (c *Conn) Receive() (*InMsg, error) {
 
 	switch m.MessageType {
 	case "ack":
-		return nil, nil // todo: mark message as sent
+		return &m, nil // todo: mark message as sent
 	case "nack":
 		return &m, nil // todo: try and resend the message (after reconnect if problem is about connection draining)
 	case "receipt":
-		return nil, nil // todo: mark message as delivered and remove from the queue
+		return &m, nil // todo: mark message as delivered and remove from the queue
 	case "control":
-		return nil, nil // todo: handle connection draining (and any other control message type?)
+		return &m, nil // todo: handle connection draining (and any other control message type?)
 	case "":
 		// acknowledge the incoming ordinary messages as per spec
 		ack := &OutMsg{MessageType: "ack", To: m.From, ID: m.ID}
@@ -92,7 +92,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 		}
 		return &m, nil
 	default:
-		// unknown message types can be ignored, as expressed in the spec
+		// unknown message types can be ignored, as per GCM specs
 	}
 	return &m, nil
 }
