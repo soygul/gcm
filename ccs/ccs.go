@@ -98,6 +98,7 @@ func (c *Conn) Receive() (*InMsg, error) {
 }
 
 // Send sends a message to GCM CCS server and returns the number of bytes written and any error encountered.
+// If empty message ID is given, it's auto-generated and message object is modified with the generated ID.
 func (c *Conn) Send(m *OutMsg) (n int, err error) {
 	if m.ID == "" {
 		if m.ID, err = getMsgID(); err != nil {
