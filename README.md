@@ -1,7 +1,7 @@
 # GCM CCS (XMPP)
 
-[![Build Status](https://travis-ci.org/nb-titan/gcm.svg?branch=master)](https://travis-ci.org/nb-titan/gcm)
-[![GoDoc](https://godoc.org/github.com/nb-titan/gcm?status.svg)](https://godoc.org/github.com/nb-titan/gcm)
+[![Build Status](https://travis-ci.org/titan-x/gcm.svg?branch=master)](https://travis-ci.org/titan-x/gcm)
+[![GoDoc](https://godoc.org/github.com/titan-x/gcm?status.svg)](https://godoc.org/github.com/titan-x/gcm)
 
 GCM (Google Cloud Messaging) CCS (Cloud Connection Server) implementation for application servers as described in [Android developer docs](https://developer.android.com/google/gcm/ccs.html).
 
@@ -16,7 +16,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/nb-titan/gcm/ccs"
+	"github.com/titan-x/gcm/ccs"
 )
 
 func main() {
