@@ -11,7 +11,9 @@ type OutMsg struct {
 	Data                     map[string]string `json:"data,omitempty"`
 	MessageType              string            `json:"message_type,omitempty"`
 	CollapseKey              string            `json:"collapse_key,omitempty"`
-	TimeToLive               int               `json:"time_to_live,omitempty"`               //default:2419200 (in seconds = 4 weeks)
+	TimeToLive               int               `json:"time_to_live,omitempty"` //default:2419200 (in seconds = 4 weeks)
+	ContentAvailable         bool              `json:"content_available,omitempty"`
+	Priority                 string            `json:"priority,omitempty"`
 	DelayWhileIdle           bool              `json:"delay_while_idle,omitempty"`           //default:false
 	DeliveryReceiptRequested bool              `json:"delivery_receipt_requested,omitempty"` //default:false
 }
