@@ -10,7 +10,7 @@ import (
 	"log"
 	"strings"
 
-	xmpp "github.com/soygul/go-xmpp"
+	"github.com/mattn/go-xmpp"
 )
 
 const (

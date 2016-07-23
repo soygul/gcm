@@ -1,0 +1,14 @@
+{
+	"ImportPath": "github.com/soygul/gcm",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v74",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/mattn/go-xmpp",
+			"Rev": "e44d1877bb457f5c3991903e9934a31e55c3a2ad"
+		}
+	]
+}
