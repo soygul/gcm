@@ -3,7 +3,7 @@ package ccs_test
 import (
 	"log"
 
-	"github.com/titan-x/gcm/ccs"
+	"github.com/soygul/gcm/ccs"
 )
 
 // Example demonstrating the use of CCS implementation in an application server.
